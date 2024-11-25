@@ -9,7 +9,7 @@
     </parent>
     <groupId>org.example</groupId>
     <artifactId>Microservicio1</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version> <!-- Changed to a fixed version -->
     <name>Microservicio1</name>
     <description>Microservicio1</description>
     <url/>
