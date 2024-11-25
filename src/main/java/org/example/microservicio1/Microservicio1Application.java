@@ -8,6 +8,8 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @EnableDiscoveryClient
 public class Microservicio1Application {
 
+
+
     public static void main(String[] args) {
         SpringApplication.run(Microservicio1Application.class, args);
     }
