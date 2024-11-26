@@ -10,5 +10,5 @@ COPY target/Microservicio1-1.0.0.jar /app/microservicio1.jar
 # Define el puerto en el que se ejecutará la aplicación
 EXPOSE 8080
 
-# Comando para ejecutar la aplicación
-ENTRYPOINT ["java", "-jar", "/app/microservicio1.jar"]
+# Comando para ejecutar la aplicación con el perfil docker
+ENTRYPOINT ["java", "-jar", "/app/microservicio1.jar", "--spring.profiles.active=docker"]
