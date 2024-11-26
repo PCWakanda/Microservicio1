@@ -1,26 +1,41 @@
 package org.example.microservicio1;
 
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class Vehicle {
-    private final String id;
-    private final AtomicInteger counter;
+    private static int vehicleCounter = 0;
+    private String id;
+    private String name;
+    private int tick;
 
     public Vehicle() {
         this.id = UUID.randomUUID().toString();
-        this.counter = new AtomicInteger(0);
+        this.name = "coche " + (++vehicleCounter);
+        this.tick = 0;
     }
 
+    // Getters and setters
     public String getId() {
         return id;
     }
 
-    public int getCounter() {
-        return counter.get();
+    public String getName() {
+        return name;
     }
 
-    public void incrementCounter() {
-        counter.incrementAndGet();
+    public int getTick() {
+        return tick;
+    }
+
+    public void incrementTick() {
+        this.tick++;
+    }
+
+    public String getStatus() {
+        return name + " lleva " + tick + " tics con vida";
+    }
+
+    public boolean shouldBeRemoved() {
+        return tick >= 5;
     }
 }

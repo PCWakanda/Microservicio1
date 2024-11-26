@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 public class RabbitMQListener {
 
     @RabbitListener(queues = "logQueue")
-    public void listen(String message) {
+    public void receiveMessage(String message) {
         System.out.println("Received message: " + message);
     }
 }
