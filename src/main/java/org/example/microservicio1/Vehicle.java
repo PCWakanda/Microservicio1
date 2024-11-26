@@ -7,11 +7,13 @@ public class Vehicle {
     private String id;
     private String name;
     private int tick;
+    private String roadName;
 
-    public Vehicle() {
+    public Vehicle(String roadName) {
         this.id = UUID.randomUUID().toString();
-        this.name = "coche " + (++vehicleCounter);
+        this.name = "coche " + (++vehicleCounter) + " " + roadName;
         this.tick = 0;
+        this.roadName = roadName;
     }
 
     // Getters and setters

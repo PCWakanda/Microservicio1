@@ -11,7 +11,7 @@ public class Microservicio1Application {
 
     public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(Microservicio1Application.class, args);
-        TrafficController trafficController = context.getBean(TrafficController.class);
-        trafficController.startTrafficFlow();
+        MasterScheduler masterScheduler = context.getBean(MasterScheduler.class);
+        masterScheduler.startSequentialFlows();
     }
 }
