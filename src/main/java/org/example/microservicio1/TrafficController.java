@@ -1,5 +1,6 @@
 package org.example.microservicio1;
 
+import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,10 +27,14 @@ public class TrafficController {
     private final List<Vehicle> vehicles2 = new ArrayList<>();
     private int tickCount1 = 0;
     private int tickCount2 = 0;
+    private final MeterRegistry meterRegistry;
 
     @Autowired
-    public TrafficController(RabbitTemplate rabbitTemplate) {
+    public TrafficController(RabbitTemplate rabbitTemplate, MeterRegistry meterRegistry) {
         this.rabbitTemplate = rabbitTemplate;
+        this.meterRegistry = meterRegistry;
+        meterRegistry.gauge("traffic.vehicles1.size", vehicles1, List::size);
+        meterRegistry.gauge("traffic.vehicles2.size", vehicles2, List::size);
     }
 
     @GetMapping("/carretera1")
