@@ -1,6 +1,5 @@
 package org.example.microservicio1;
 
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
