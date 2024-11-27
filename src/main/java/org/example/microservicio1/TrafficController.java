@@ -1,6 +1,7 @@
 package org.example.microservicio1;
 
 import io.micrometer.core.instrument.MeterRegistry;
+import jakarta.annotation.PostConstruct;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,13 +29,20 @@ public class TrafficController {
     private int tickCount1 = 0;
     private int tickCount2 = 0;
     private final MeterRegistry meterRegistry;
+    private final VehicleRepository vehicleRepository;
 
     @Autowired
-    public TrafficController(RabbitTemplate rabbitTemplate, MeterRegistry meterRegistry) {
+    public TrafficController(RabbitTemplate rabbitTemplate, MeterRegistry meterRegistry, VehicleRepository vehicleRepository) {
         this.rabbitTemplate = rabbitTemplate;
         this.meterRegistry = meterRegistry;
+        this.vehicleRepository = vehicleRepository;
         meterRegistry.gauge("traffic.vehicles1.size", vehicles1, List::size);
         meterRegistry.gauge("traffic.vehicles2.size", vehicles2, List::size);
+    }
+
+    @PostConstruct
+    public void init() {
+        vehicleRepository.deleteAll();
     }
 
     @GetMapping("/carretera1")
@@ -70,6 +78,7 @@ public class TrafficController {
                         for (int i = 0; i < vehicleCount; i++) {
                             Vehicle vehicle = new Vehicle("carretera 1");
                             vehicles1.add(vehicle);
+                            vehicleRepository.save(vehicle);
                             sink1.tryEmitNext(vehicle);
                             rabbitTemplate.convertAndSend("logQueue", formatLogMessage("Vehicle added: " + vehicle.getName()));
                         }
@@ -81,6 +90,7 @@ public class TrafficController {
                         rabbitTemplate.convertAndSend("logQueue", formatLogMessage(vehicle.getStatus()));
                         if (vehicle.shouldBeRemoved()) {
                             iterator.remove();
+                            vehicleRepository.delete(vehicle);
                             rabbitTemplate.convertAndSend("logQueue", formatLogMessage("Vehicle removed: " + vehicle.getName()));
                         }
                     }
@@ -102,6 +112,7 @@ public class TrafficController {
                         for (int i = 0; i < vehicleCount; i++) {
                             Vehicle vehicle = new Vehicle("carretera 2");
                             vehicles2.add(vehicle);
+                            vehicleRepository.save(vehicle);
                             sink2.tryEmitNext(vehicle);
                             rabbitTemplate.convertAndSend("logQueue", formatLogMessage("Vehicle added: " + vehicle.getName()));
                         }
@@ -113,6 +124,7 @@ public class TrafficController {
                         rabbitTemplate.convertAndSend("logQueue", formatLogMessage(vehicle.getStatus()));
                         if (vehicle.shouldBeRemoved()) {
                             iterator.remove();
+                            vehicleRepository.delete(vehicle);
                             rabbitTemplate.convertAndSend("logQueue", formatLogMessage("Vehicle removed: " + vehicle.getName()));
                         }
                     }
