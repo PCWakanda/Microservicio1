@@ -1,19 +1,30 @@
 package org.example.microservicio1;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.util.UUID;
 
+@Entity
+@Table(name = "vehicles")
 public class Vehicle {
     private static int vehicleCounter = 0;
+
+    @Id
     private String id;
     private String name;
-    private int tick;
     private String roadName;
+    private int tick;
+
+    // Default constructor
+    public Vehicle() {
+    }
 
     public Vehicle(String roadName) {
         this.id = UUID.randomUUID().toString();
         this.name = "coche " + (++vehicleCounter) + " " + roadName;
-        this.tick = 0;
         this.roadName = roadName;
+        this.tick = 0;
     }
 
     // Getters and setters
@@ -23,6 +34,10 @@ public class Vehicle {
 
     public String getName() {
         return name;
+    }
+
+    public String getRoadName() {
+        return roadName;
     }
 
     public int getTick() {
